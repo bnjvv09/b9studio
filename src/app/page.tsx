@@ -12,8 +12,11 @@ import { About } from "@/components/About";
 import { ClientReady } from "@/components/ClientReady";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
+import { getPricingPlans } from "@/actions/pricing";
 
-export default function Home() {
+export default async function Home() {
+  const { plans } = await getPricingPlans();
+
   return (
     <div className="flex flex-col min-h-screen relative">
       {/* Sticky Minimal Navbar */}
@@ -36,7 +39,7 @@ export default function Home() {
         <Services />
 
         {/* 6. Pricing / Investment References */}
-        <Pricing />
+        <Pricing plans={plans} />
 
         {/* 7. Work Process (5 steps with progressive scroll reveal) */}
         <Process />

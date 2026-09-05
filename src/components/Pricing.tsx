@@ -5,8 +5,24 @@ import { portfolioData } from "@/data/portfolioData";
 import { ArrowRight, Check, Sparkles, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 
-export const Pricing = () => {
-  const { pricing } = portfolioData;
+import { DbPricingPlan } from "@/lib/supabase";
+
+interface PricingProps {
+  plans?: DbPricingPlan[];
+}
+
+export const Pricing = ({ plans }: PricingProps) => {
+  // Usar planes dinámicos de Supabase si existen, o fallback a portfolioData
+  const displayPlans = plans && plans.length > 0
+    ? plans.map((p) => ({
+        title: p.title,
+        price: p.price,
+        deliveryTime: p.delivery_time,
+        description: p.description,
+        features: p.features,
+        badge: p.badge,
+      }))
+    : portfolioData.pricing;
 
   const getPlanStyles = (idx: number, isPopular: boolean) => {
     if (isPopular) {
@@ -72,7 +88,7 @@ export const Pricing = () => {
 
         {/* Pricing Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {pricing.map((plan, idx) => {
+          {displayPlans.map((plan, idx) => {
             const isPopular = idx === 1;
             const styles = getPlanStyles(idx, isPopular);
 
